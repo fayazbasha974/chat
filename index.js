@@ -11,6 +11,7 @@ app.use('/auth', require('./routes/auth'));
 app.use('/login', require('./routes/login.js'));
 app.use('/signup', require('./routes/signup.js'));
 app.use('/auth/friendRequest', require('./routes/friend-request'));
+app.use('/auth/acceptRequest', require('./routes/accept-request'));
 
 mongoose.connect(process.env.mongoDB, (...args) => {
     console.log('DB connected');
