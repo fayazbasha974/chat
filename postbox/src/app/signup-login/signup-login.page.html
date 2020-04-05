@@ -1,0 +1,27 @@
+<ion-row>
+  <ion-col size="3">
+  </ion-col>
+  <ion-col size="6">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{title}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content [formGroup]="personForm">
+        <ion-item *ngIf="personForm.get('displayName')">
+          <ion-label position="floating">Name:</ion-label>
+          <ion-input formControlName="displayName"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Phone Number:</ion-label>
+          <ion-input type="number" formControlName="mobileNumber"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Password:</ion-label>
+          <ion-input type="password" formControlName="password"></ion-input>
+        </ion-item>
+        <ion-button color="primary" (click)="Submit()">Submit</ion-button>
+        <a (click)="changeToLogin()">Already Member? Login</a>
+      </ion-card-content>
+    </ion-card>
+  </ion-col>
+</ion-row>
