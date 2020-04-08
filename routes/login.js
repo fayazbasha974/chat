@@ -14,7 +14,7 @@ router.post('/', async function(req, res) {
                 res.json({error: 'invalid password'});
             } else {
                 const token = jwt.sign({mobileNumber: req.body.mobileNumber, id: user[0]['_id']}, 'secret', {
-                    expiresIn: 600
+                    // expiresIn: 600
                 });
                 res.json({ success: 'login succesfully', token});
             }

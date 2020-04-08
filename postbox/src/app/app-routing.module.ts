@@ -8,6 +8,10 @@ const routes: Routes = [
     path: 'signup-login',
     loadChildren: () => import('./signup-login/signup-login.module').then( m => m.SignupLoginPageModule)
   },
+  {
+    path: 'chat',
+    loadChildren: () => import('./chat/chat.module').then( m => m.ChatPageModule)
+  },
 ];
 
 @NgModule({
