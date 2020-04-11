@@ -8,7 +8,9 @@
 
   <ion-item *ngFor="let chat of chatList">
     <ion-label>
-      {{chat.message}}
+      <span [ngClass]="{'pull-right': chat.sender}">
+        {{chat.message}}
+      </span>
     </ion-label>
   </ion-item>
 

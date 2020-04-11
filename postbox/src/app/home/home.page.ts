@@ -11,6 +11,8 @@ import { HomeService } from './home.service';
 export class HomePage implements OnInit {
 
   friends: any;
+  total: any;
+  isRequests: boolean;
 
   constructor(private homeService: HomeService, private router: Router) {}
 
@@ -20,16 +22,32 @@ export class HomePage implements OnInit {
 
   getDetails() {
     this.homeService.getDetails().subscribe(response => {
+      this.total = response;
       this.friends = response.friends;
-      console.log(this.friends);
     }, error => {
       console.log(error);
     });
   }
 
   openChat(friend: any) {
-    console.log('friend', friend);
-    this.router.navigate(['/chat'], { queryParams:  friend  });
+    if (!this.isRequests) {
+      this.router.navigate(['/chat'], { queryParams:  friend  });
+    } else {
+      this.homeService.acceptRequest({id: friend._id}).subscribe(success => {
+        console.log(success);
+      }, error => {
+        console.log(error);
+      });
+    }
+  }
+
+  findFriend() {
+    this.router.navigate(['/find-friend']);
+  }
+
+  showRequests() {
+    this.isRequests = true;
+    this.friends = this.total.friendRequests;
   }
 
 }

@@ -5,17 +5,16 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class HomeService {
+export class FindFriendService {
 
   constructor(private apiService: ApiServiceService) { }
 
-  getDetails(): Observable<any> {
-    const url = 'auth/getDetails';
-    return this.apiService.get(url);
+  findFriend(data: any): Observable<any> {
+    return this.apiService.post('auth/findFriend', data);
   }
 
-  acceptRequest(data: any): Observable<any> {
-    return this.apiService.post('auth/acceptRequest', data);
+  sendRequest(data: any): Observable<any> {
+    return this.apiService.post('auth/friendRequest', data);
   }
 
 }

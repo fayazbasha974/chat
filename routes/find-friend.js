@@ -1,15 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-
 const User = mongoose.model('User');
 
-router.get('/', (req, res) => {
-    User.find({_id: req.user.id}).populate('friends', ['displayName', 'mobileNumber']).populate('friendRequests', ['displayName', 'mobileNumber']).exec((err, docs) => {
+router.post('/', (req, res) => {
+    User.find({mobileNumber: req.body.mobileNumber}, (err, docs) => {
         if (err) {
             res.json(err);
         } else {
-            res.json(docs[0]);
+            res.json(docs);
         }
     });
 });

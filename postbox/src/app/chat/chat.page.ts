@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ChatService } from './chat.service';
+import io from 'socket.io-client';
 
 @Component({
   selector: 'app-chat',
@@ -21,6 +22,13 @@ export class ChatPage implements OnInit {
       this.reciever = params;
       this.getChat();
     });
+    const socket = io('http://localhost:3001/');
+    socket.on('con', data => {
+      console.log(data);
+    });
+    socket.on('login', data => {
+      console.log(data);
+    });
   }
 
   Submit() {
@@ -38,7 +46,6 @@ export class ChatPage implements OnInit {
   getChat() {
     this.chatService.getChat({mobileNumber: this.reciever.mobileNumber}).subscribe(
       success => {
-        console.log('success', success);
         this.chatList = success;
       }, error => {
         console.log(error);
