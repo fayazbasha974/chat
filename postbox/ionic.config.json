@@ -1,7 +1,0 @@
-{
-  "name": "postbox",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}
