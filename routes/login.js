@@ -25,4 +25,8 @@ module.exports = function(app) {
         }
         next();
     });
+
+    app.get('', function(req, res) {
+        res.json({working: 'yes'});
+    });
 };
