@@ -18,6 +18,7 @@ export class ChatPage implements OnInit {
 
   ngOnInit() {
     this.message = '';
+    this.chatList = [];
     this.activeRoute.queryParams.subscribe(params => {
       this.reciever = params;
       this.getChat();
@@ -26,8 +27,9 @@ export class ChatPage implements OnInit {
     socket.on('con', data => {
       console.log(data);
     });
-    socket.on('login', data => {
-      console.log(data);
+    socket.on('msg', data => {
+      this.chatList.push(data);
+      this.message = '';
     });
   }
 
@@ -37,7 +39,6 @@ export class ChatPage implements OnInit {
       id: this.reciever._id,
       message: this.message
     }).subscribe(success => {
-      console.log(success);
     }, error => {
       console.log(error);
     })

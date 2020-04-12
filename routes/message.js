@@ -1,5 +1,5 @@
-const express = require('express');
-const router = express.Router();
+// const express = require('express');
+// const router = express.Router();
 const mongoose = require('mongoose');
 const schema = mongoose.Schema({
     msg: {
@@ -17,49 +17,59 @@ const schema = mongoose.Schema({
     }
 });
 
-router.post('/', (req, res) => {
-    const MessageCollection = getSchema(req);
-    const message = {
-        msg: req.body.message,
-        sender: req.user.mobileNumber,
-        reciever: req.body.mobileNumber
-    };
-    const Message = new MessageCollection(message);
-    Message.save((err, docs) => {
-        if (err) {
-            res.json(err);
-        } else {
-            res.json(docs);
-        }
-    });
-});
-
-router.post('/chat', (req, res) => {
-    const MessageCollection = getSchema(req);
-    MessageCollection.aggregate([
-        {
-            $project: {
-                _id: 0,
-                'message': '$msg',
-                'sender': {
-                    $cond: [{ $eq: [ "$sender", req.user.mobileNumber] }, true, false]
-                }
+module.exports = (app, io) => {
+    app.post('/auth/message', (req, res) => {
+        const MessageCollection = getSchema(req);
+        const message = {
+            msg: req.body.message,
+            sender: req.user.mobileNumber,
+            reciever: req.body.mobileNumber
+        };
+        const Message = new MessageCollection(message);
+        Message.save((err, docs) => {
+            if (err) {
+                res.json(err);
+            } else {
+                io.sockets.emit('msg', docs);
+                res.json(docs);
             }
-        }
-    ], (err, docs) => {
-        if (err) {
-            res.json(err);
-        } else {
-            res.json(docs);
-        }
+        });
     });
-});
 
-function getSchema(req) {
-    const userMobile = req.user.mobileNumber;
-    const recieverMobile = req.body.mobileNumber;
-    const mongooseSchema = userMobile < recieverMobile ? userMobile.toString() + recieverMobile.toString() : recieverMobile.toString() + userMobile.toString();
-    return mongoose.model(mongooseSchema, schema);
+    app.post('/auth/message/chat', (req, res) => {
+        const MessageCollection = getSchema(req);
+        // MessageCollection.aggregate([
+        //     {
+        //         $project: {
+        //             _id: 0,
+        //             'message': '$msg',
+        //             'sender': {
+        //                 $cond: [{ $eq: ["$sender", req.user.mobileNumber] }, true, false]
+        //             }
+        //         }
+        //     }
+        // ], (err, docs) => {
+        //     if (err) {
+        //         res.json(err);
+        //     } else {
+        //         io.sockets.emit('msg', docs);
+        //         res.json(docs);
+        //     }
+        // });
+        MessageCollection.find({}, (err, docs) => {
+            if (err) {
+                res.json(err);
+            } else {
+                res.json(docs);
+            }
+        });
+    });
+
+    function getSchema(req) {
+        const userMobile = req.user.mobileNumber;
+        const recieverMobile = req.body.mobileNumber;
+        const mongooseSchema = userMobile < recieverMobile ? userMobile.toString() + recieverMobile.toString() : recieverMobile.toString() + userMobile.toString();
+        return mongoose.model(mongooseSchema, schema);
+    }
+
 }
-
-module.exports = router;

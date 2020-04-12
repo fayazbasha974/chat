@@ -8,8 +8,8 @@
 
   <ion-item *ngFor="let chat of chatList">
     <ion-label>
-      <span [ngClass]="{'pull-right': chat.sender}">
-        {{chat.message}}
+      <span [ngClass]="{'pull-right': chat.sender != reciever.mobileNumber}">
+        {{chat.msg}}
       </span>
     </ion-label>
   </ion-item>
